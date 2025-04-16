@@ -1,25 +1,20 @@
 class Solution {
 public:
     int jump(vector<int>& nums) {
-        //IT IS GIVEN THAT WE CAN ALWAYS REACH nums[n-1] !!
+        //strivers solution https://www.youtube.com/watch?v=7SBVnw7GSTk
+        //greedy solution 
         int n=nums.size();
-        vector<int> dp(n,1e8);
-        //dp[i]=minimum number of jumps required to reach i!!
-        //see the constraints
-        //nums[i] is max 1e3 and n is max 1e4
-        dp[0]=0;
-        for(int i=0;i<n;i++){
-            int max_jump=nums[i];
-            if(dp[i]==1e8)continue;//i couldn't be reached
-            //but actually above case wouldn't be there, as we are able
-            //to reach end, so we should be able to reach all intermediate states
-            //also as all jumps from 0 to nums[i] are allowed !!
-            for(int j=1;j<=max_jump; j++){
-                int idx=i+j;
-                if(i+j>=n)break;
-                dp[idx]=min(dp[idx],dp[i]+1);
+        int jumps=0;
+        int l=0,r=0,farthest=0;
+        //maintaining a range from l to r
+        while(r<n-1){
+            for(int i=l;i<=r;i++){
+                farthest=max(farthest,nums[i]+i);
             }
+            l=r+1;
+            r=farthest;
+            jumps++;
         }
-        return dp[n-1];
+        return jumps;
     }
 };
